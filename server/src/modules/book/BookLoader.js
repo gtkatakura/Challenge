@@ -14,7 +14,7 @@ export const loadAllBooks = (root, args, context) => {
         age: 33,
       },
     },
-  ];
+  ]
 
-  return books;
-};
+  return books
+}

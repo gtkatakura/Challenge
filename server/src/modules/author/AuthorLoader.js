@@ -8,7 +8,7 @@ export const loadAllAuthors = (root, args, context) => {
       name: 'Sebastiao matos',
       age: 22,
     },
-  ];
+  ]
 
-  return authors;
-};
+  return authors
+}
