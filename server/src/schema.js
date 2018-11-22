@@ -1,5 +1,6 @@
 import { makeExecutableSchema } from 'graphql-tools'
 import GraphQLJSON from 'graphql-type-json'
+import { GraphQLDateTime } from 'graphql-iso-date'
 import _ from 'lodash/fp'
 
 import * as ProductType from './modules/product/ProductType'
@@ -11,10 +12,12 @@ const types = [
   ProductType,
   UserType,
 ]
+
 const typeDefs = types.map(type => type.typeDefs)
 
 const resolvers = {
   JSON: GraphQLJSON,
+  DateTime: GraphQLDateTime,
   Query: mergeAllBy('queries', types),
   Mutation: mergeAllBy('mutations', types),
   ...mergeAllBy('resolvers', types),
@@ -22,6 +25,13 @@ const resolvers = {
 
 const SchemaDefinition = `
   scalar JSON
+  scalar DateTime
+
+  interface Model {
+    id: ID
+    createdAt: DateTime
+    updatedAt: DateTime
+  }
 
   schema {
     query: Query

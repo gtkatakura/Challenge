@@ -1,10 +1,12 @@
 import * as User from './UserModel'
 
 export const typeDefs = `
-  type User {
+  type User implements Model {
     id: ID
     name: String
     email: String
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   input UserInput {
@@ -24,7 +26,7 @@ export const queries = {
 }
 
 export const mutations = {
-  createUser: (root, { input }) => {
+  createUser: async (root, { input }) => {
     const errors = User.validate(input)
 
     if (errors) {
@@ -33,7 +35,7 @@ export const mutations = {
 
     const user = new User.Model(input)
 
-    user.save()
+    await user.save()
 
     return {
       payload: user,
