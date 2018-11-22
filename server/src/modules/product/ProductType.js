@@ -41,9 +41,3 @@ export const mutations = {
     }
   },
 }
-
-export const resolvers = {
-  Product: {
-    id: product => product.get('_id').toString(),
-  },
-}

@@ -42,9 +42,3 @@ export const mutations = {
     }
   },
 }
-
-export const resolvers = {
-  User: {
-    id: user => user.get('_id').toString(),
-  },
-}
