@@ -1,5 +1,7 @@
 import { Schema } from 'mongoose'
+import Joi from 'joi'
 import database from '../../database'
+import { validateFromJoiSchema } from '../../core'
 
 const ProductSchema = new Schema(
   {
@@ -11,6 +13,12 @@ const ProductSchema = new Schema(
   },
 )
 
-const ProductModel = database.model('Product', ProductSchema)
+export const Model = database.model('Product', ProductSchema)
 
-export default ProductModel
+const validationSchema = Joi.object().keys({
+  name: Joi.string().required().min(3),
+  price: Joi.number().required().integer().positive(),
+})
+
+export const validate = validateFromJoiSchema(validationSchema)
+

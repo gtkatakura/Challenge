@@ -12,6 +12,8 @@
     "dotenv": "^6.1.0",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.3",
+    "graphql-type-json": "^0.2.1",
+    "joi": "^14.1.0",
     "mongoose": "^5.3.13"
   },
   "devDependencies": {
