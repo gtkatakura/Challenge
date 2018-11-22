@@ -1,6 +1,7 @@
-const convict = require('convict')
+import convict from 'convict'
+import dotenv from 'dotenv'
 
-require('dotenv').config()
+dotenv.config()
 
 const config = convict({
   mongodb: {
