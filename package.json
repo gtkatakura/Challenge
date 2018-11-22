@@ -9,7 +9,12 @@
     "eslint-plugin-jsx-a11y": "6.1.1",
     "eslint-plugin-react": "7.11.0",
     "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
     "prettier": "^1.15.2"
+  },
+  "lint-staged": {
+    "*.(js|json|yml|md)": ["prettier --write", "git add"],
+    "{.eslintrc,.babelrc,.prettierrc}": ["prettier --write", "git add"]
   },
   "husky": {
     "hooks": {
