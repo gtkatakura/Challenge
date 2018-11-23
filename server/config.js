@@ -11,6 +11,22 @@ const config = convict({
       env: 'MONGODB_URI',
     },
   },
+  jwt: {
+    secret: {
+      doc: 'The secret key for the JWT',
+      default: 'FotonTech-Challenge',
+      env: 'JWT_SECRET_KEY',
+    },
+  },
+  auth: {
+    bcrypt: {
+      salt: {
+        doc: 'The salt to be used in encryption',
+        default: 10,
+        env: 'AUTH_BCRYPT_SALT',
+      },
+    },
+  },
 })
 
 config.validate()

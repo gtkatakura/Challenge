@@ -46,6 +46,7 @@ const SchemaDefinition = `
   type Mutation {
     createProduct(input: ProductInput!): ProductEvent
     createUser(input: UserInput!): UserEvent
+    signIn(email: String, password: String): SignInEvent
   }
 
   type Error {

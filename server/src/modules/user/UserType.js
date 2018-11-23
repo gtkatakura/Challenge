@@ -1,4 +1,12 @@
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { AuthenticationError } from 'apollo-server'
+
+import config from '../../../config'
+
 import * as User from './UserModel'
+
+const createToken = ({ id, email, name }) => jwt.sign({ id, email, name }, config.get('jwt.secret'))
 
 export const typeDefs = `
   type User implements Model {
@@ -24,10 +32,23 @@ export const typeDefs = `
     payload: User
     errors: [Error]
   }
+
+  type SignInEvent {
+    payload: SignInPayload
+    errors: [Error]
+  }
+
+  type SignInPayload {
+    token: String
+  }
 `
 
 export const queries = {
-  users: async (root, { first, after }) => {
+  users: async (root, { first, after }, { me }) => {
+    if (!me) {
+      throw new AuthenticationError('Not authenticated')
+    }
+
     const { items, hasMore } = await User.Model.paginate({}, {
       sort: { _id: 1 },
       limit: first,
@@ -49,12 +70,46 @@ export const mutations = {
       return { errors }
     }
 
-    const user = new User.Model(input)
+    const passwordHash = await bcrypt.hash(input.password, config.get('auth.bcrypt.salt'))
+
+    const user = new User.Model({
+      ...input,
+      password: passwordHash,
+    })
 
     await user.save()
 
     return {
       payload: user,
+    }
+  },
+  signIn: async (root, { email, password }) => {
+    const user = await User.Model.findOne({ email })
+
+    if (!user) {
+      return {
+        errors: [{
+          type: 'signIn.email.invalid',
+          path: ['email'],
+          message: 'invalid',
+        }],
+      }
+    }
+
+    if (!await bcrypt.compare(password, user.password)) {
+      return {
+        errors: [{
+          type: 'signIn.password.invalid',
+          path: ['password'],
+          message: 'invalid',
+        }],
+      }
+    }
+
+    return {
+      payload: {
+        token: createToken(user),
+      },
     }
   },
 }
