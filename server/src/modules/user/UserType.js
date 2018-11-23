@@ -27,7 +27,7 @@ export const queries = {
 
 export const mutations = {
   createUser: async (root, { input }) => {
-    const errors = User.validate(input)
+    const errors = await User.validate(input)
 
     if (errors) {
       return { errors }

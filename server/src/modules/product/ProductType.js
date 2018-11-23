@@ -26,7 +26,7 @@ export const queries = {
 
 export const mutations = {
   createProduct: async (root, { input }) => {
-    const errors = Product.validate(input)
+    const errors = await Product.validate(input)
 
     if (errors) {
       return { errors }
