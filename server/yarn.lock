@@ -2644,6 +2644,11 @@ mongodb@3.1.10:
     mongodb-core "3.1.9"
     safe-buffer "^5.1.2"
 
+mongoose-cursor-pagination@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mongoose-cursor-pagination/-/mongoose-cursor-pagination-1.0.1.tgz#458eb79d764e4a9934e5faf109c8b93cfd7d33c4"
+  integrity sha512-LIPpaWWcRcjxU3IiXf9h7nR9gS5yw9F/vv72vHvBM6zAZkcdk47JqxtXj3gws1QOF3iDtfmRxyYpNwGvF1IdJw==
+
 mongoose-legacy-pluralize@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"

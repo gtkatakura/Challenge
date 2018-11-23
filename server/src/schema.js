@@ -39,8 +39,8 @@ const SchemaDefinition = `
   }
 
   type Query {
-    products: [Product]
-    users: [User]
+    products(first: Int = 20, after: ID): ProductCollection
+    users(first: Int = 20, after: ID): UserCollection
   }
 
   type Mutation {

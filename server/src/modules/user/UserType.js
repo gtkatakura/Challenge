@@ -9,6 +9,11 @@ export const typeDefs = `
     updatedAt: DateTime
   }
 
+  type UserCollection {
+    payload: [User]
+    hasMore: Boolean
+  }
+
   input UserInput {
     name: String
     email: String
@@ -22,7 +27,18 @@ export const typeDefs = `
 `
 
 export const queries = {
-  users: () => User.Model.find(),
+  users: async (root, { first, after }) => {
+    const { items, hasMore } = await User.Model.paginate({}, {
+      sort: { _id: 1 },
+      limit: first,
+      startingAfter: after,
+    })
+
+    return {
+      payload: items,
+      hasMore,
+    }
+  },
 }
 
 export const mutations = {

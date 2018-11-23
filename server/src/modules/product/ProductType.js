@@ -9,6 +9,11 @@ export const typeDefs = `
     updatedAt: DateTime
   }
 
+  type ProductCollection {
+    payload: [Product]
+    hasMore: Boolean
+  }
+
   input ProductInput {
     name: String
     price: Float
@@ -21,7 +26,18 @@ export const typeDefs = `
 `
 
 export const queries = {
-  products: () => Product.Model.find(),
+  products: async (root, { first, after }) => {
+    const { items, hasMore } = await Product.Model.paginate({}, {
+      sort: { _id: 1 },
+      limit: first,
+      startingAfter: after,
+    })
+
+    return {
+      payload: items,
+      hasMore,
+    }
+  },
 }
 
 export const mutations = {
