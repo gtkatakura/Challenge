@@ -113,3 +113,15 @@ export const mutations = {
     }
   },
 }
+
+export const resolvers = {
+  User: {
+    email: (user, args, { me }) => {
+      if (user.id === me.id) {
+        return user.email
+      }
+
+      return null
+    },
+  },
+}
