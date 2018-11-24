@@ -1,37 +1,28 @@
-import { ApolloServer } from 'apollo-server'
-import { makeExecutableSchema } from 'graphql-tools'
+import { ApolloServer, AuthenticationError } from 'apollo-server'
+import jwt from 'jsonwebtoken'
 
-import * as BookType from './src/modules/book/BookType'
-import * as AuthorType from './src/modules/author/AuthorType'
+import config from './config'
 
-const SchemaDefinition = `
-  schema {
-    query: Query
-  }
-  type Query {
-    books: [Book]
-    authors: [Author]
-  }
-`
+import { schema } from './src/schema'
 
-const typeDefs = [
-  BookType.typeDefs,
-  AuthorType.typeDefs,
-]
+const server = new ApolloServer({
+  schema,
+  context: async ({ req }) => {
+    const { token } = req.headers
 
-const resolvers = {
-  Query: {
-    ...BookType.resolvers,
-    ...AuthorType.resolvers,
+    if (token) {
+      try {
+        return {
+          me: await jwt.verify(token, config.get('jwt.secret')),
+        }
+      } catch {
+        throw new AuthenticationError('Your session expired. Sign in again.')
+      }
+    }
+
+    return {}
   },
-}
-
-const schema = makeExecutableSchema({
-  typeDefs: [SchemaDefinition, ...typeDefs],
-  resolvers,
 })
-
-const server = new ApolloServer({ schema })
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`)

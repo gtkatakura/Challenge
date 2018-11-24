@@ -13,7 +13,8 @@
     "prettier": "^1.15.2"
   },
   "lint-staged": {
-    "*.(js|json|yml|md)": ["prettier --write", "git add"],
+    "*.(json|yml|md)": ["prettier --write", "git add"],
+    "*.js": ["eslint --fix", "git add"],
     "{.eslintrc,.babelrc,.prettierrc}": ["prettier --write", "git add"]
   },
   "husky": {
