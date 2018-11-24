@@ -1,9 +1,3 @@
-- [ ] Padronizar a codebase
-  - [ ] editorconfig
-  - [ ] prettier
-  - [ ] eslint
-- [ ]
-
 #### 1. Auth
 
 On the **Auth** screen the user should be able to _Login/Register_.
