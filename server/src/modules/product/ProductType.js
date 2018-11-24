@@ -1,6 +1,3 @@
-
-import { AuthenticationError } from 'apollo-server'
-
 import * as Product from './ProductModel'
 
 export const typeDefs = `
@@ -37,11 +34,7 @@ export const mutations = `
 `
 
 const Query = {
-  products: async (root, { first, after }, { me }) => {
-    if (!me) {
-      throw new AuthenticationError('Not authenticated')
-    }
-
+  products: async (root, { first, after }) => {
     const { items, hasMore } = await Product.Model.paginate({}, {
       sort: { _id: 1 },
       limit: first,
@@ -56,11 +49,7 @@ const Query = {
 }
 
 const Mutation = {
-  createProduct: async (root, { input }, { me }) => {
-    if (!me) {
-      throw new AuthenticationError('Not authenticated')
-    }
-
+  createProduct: async (root, { input }) => {
     const errors = await Product.validate(input)
 
     if (errors) {

@@ -1,7 +1,10 @@
 import { makeExecutableSchema } from 'graphql-tools'
 import GraphQLJSON from 'graphql-type-json'
 import { GraphQLDateTime } from 'graphql-iso-date'
+import { AuthenticationError } from 'apollo-server'
 import _ from 'lodash/fp'
+
+import { applyInterceptor } from './modules/core'
 
 import * as ProductType from './modules/product/ProductType'
 import * as UserType from './modules/user/UserType'
@@ -17,11 +20,17 @@ const types = [
 
 const typeDefs = types.map(type => type.typeDefs)
 
-const resolvers = {
+const isAuthenticated = (root, args, { me }) => {
+  if (!me) {
+    throw new AuthenticationError('Not authenticated')
+  }
+}
+
+const resolvers = _.merge({
   JSON: GraphQLJSON,
   DateTime: GraphQLDateTime,
-  ...mergeAllBy('resolvers', types),
-}
+  ...applyInterceptor(isAuthenticated, mergeAllBy('resolvers', types)),
+}, AuthenticationType.resolvers)
 
 const SchemaDefinition = `
   scalar JSON

@@ -1,5 +1,3 @@
-import { AuthenticationError } from 'apollo-server'
-
 import * as User from './UserModel'
 
 export const typeDefs = `
@@ -22,11 +20,7 @@ export const queries = `
 `
 
 const Query = {
-  users: async (root, { first, after }, { me }) => {
-    if (!me) {
-      throw new AuthenticationError('Not authenticated')
-    }
-
+  users: async (root, { first, after }) => {
     const { items, hasMore } = await User.Model.paginate({}, {
       sort: { _id: 1 },
       limit: first,
