@@ -28,7 +28,15 @@ export const typeDefs = `
   }
 `
 
-export const queries = {
+export const queries = `
+  products(first: Int = 20, after: ID): ProductCollection
+`
+
+export const mutations = `
+  createProduct(input: ProductInput!): ProductEvent
+`
+
+const Query = {
   products: async (root, { first, after }, { me }) => {
     if (!me) {
       throw new AuthenticationError('Not authenticated')
@@ -47,7 +55,7 @@ export const queries = {
   },
 }
 
-export const mutations = {
+const Mutation = {
   createProduct: async (root, { input }, { me }) => {
     if (!me) {
       throw new AuthenticationError('Not authenticated')
@@ -68,3 +76,5 @@ export const mutations = {
     }
   },
 }
+
+export const resolvers = { Query, Mutation }

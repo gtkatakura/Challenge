@@ -18,8 +18,6 @@ const typeDefs = types.map(type => type.typeDefs)
 const resolvers = {
   JSON: GraphQLJSON,
   DateTime: GraphQLDateTime,
-  Query: mergeAllBy('queries', types),
-  Mutation: mergeAllBy('mutations', types),
   ...mergeAllBy('resolvers', types),
 }
 
@@ -39,14 +37,11 @@ const SchemaDefinition = `
   }
 
   type Query {
-    products(first: Int = 20, after: ID): ProductCollection
-    users(first: Int = 20, after: ID): UserCollection
+    ${_.map('queries', types).join('')}
   }
 
   type Mutation {
-    createProduct(input: ProductInput!): ProductEvent
-    createUser(input: UserInput!): UserEvent
-    signIn(email: String, password: String): SignInEvent
+    ${_.map('mutations', types).join('')}
   }
 
   type Error {
@@ -56,6 +51,8 @@ const SchemaDefinition = `
     context: JSON
   }
 `
+
+console.log(SchemaDefinition)
 
 export const schema = makeExecutableSchema({
   typeDefs: [SchemaDefinition, ...typeDefs],

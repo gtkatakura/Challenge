@@ -43,7 +43,7 @@ export const typeDefs = `
   }
 `
 
-export const queries = {
+const Query = {
   users: async (root, { first, after }, { me }) => {
     if (!me) {
       throw new AuthenticationError('Not authenticated')
@@ -62,7 +62,16 @@ export const queries = {
   },
 }
 
-export const mutations = {
+export const queries = `
+  users(first: Int = 20, after: ID): UserCollection
+`
+
+export const mutations = `
+  createUser(input: UserInput!): UserEvent
+  signIn(email: String, password: String): SignInEvent
+`
+
+const Mutation = {
   createUser: async (root, { input }) => {
     const errors = await User.validate(input)
 
@@ -115,6 +124,8 @@ export const mutations = {
 }
 
 export const resolvers = {
+  Query,
+  Mutation,
   User: {
     email: (user, args, { me }) => {
       if (user.id === me.id) {
