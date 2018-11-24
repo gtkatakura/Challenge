@@ -5,10 +5,12 @@ import _ from 'lodash/fp'
 
 import * as ProductType from './modules/product/ProductType'
 import * as UserType from './modules/user/UserType'
+import * as AuthenticationType from './modules/authentication/Type'
 
 const mergeAllBy = (iteratee, objects) => _.mergeAll(_.map(iteratee, objects))
 
 const types = [
+  AuthenticationType,
   ProductType,
   UserType,
 ]
@@ -51,8 +53,6 @@ const SchemaDefinition = `
     context: JSON
   }
 `
-
-console.log(SchemaDefinition)
 
 export const schema = makeExecutableSchema({
   typeDefs: [SchemaDefinition, ...typeDefs],

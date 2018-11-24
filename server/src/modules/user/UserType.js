@@ -1,12 +1,6 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { AuthenticationError } from 'apollo-server'
 
-import config from '../../../config'
-
 import * as User from './UserModel'
-
-const createToken = ({ id, email, name }) => jwt.sign({ id, email, name }, config.get('jwt.secret'))
 
 export const typeDefs = `
   type User implements Model {
@@ -21,26 +15,10 @@ export const typeDefs = `
     payload: [User]
     hasMore: Boolean
   }
+`
 
-  input UserInput {
-    name: String
-    email: String
-    password: String
-  }
-
-  type UserEvent {
-    payload: User
-    errors: [Error]
-  }
-
-  type SignInEvent {
-    payload: SignInPayload
-    errors: [Error]
-  }
-
-  type SignInPayload {
-    token: String
-  }
+export const queries = `
+  users(first: Int = 20, after: ID): UserCollection
 `
 
 const Query = {
@@ -62,70 +40,8 @@ const Query = {
   },
 }
 
-export const queries = `
-  users(first: Int = 20, after: ID): UserCollection
-`
-
-export const mutations = `
-  createUser(input: UserInput!): UserEvent
-  signIn(email: String, password: String): SignInEvent
-`
-
-const Mutation = {
-  createUser: async (root, { input }) => {
-    const errors = await User.validate(input)
-
-    if (errors) {
-      return { errors }
-    }
-
-    const passwordHash = await bcrypt.hash(input.password, config.get('auth.bcrypt.salt'))
-
-    const user = new User.Model({
-      ...input,
-      password: passwordHash,
-    })
-
-    await user.save()
-
-    return {
-      payload: user,
-    }
-  },
-  signIn: async (root, { email, password }) => {
-    const user = await User.Model.findOne({ email })
-
-    if (!user) {
-      return {
-        errors: [{
-          type: 'signIn.email.invalid',
-          path: ['email'],
-          message: 'invalid',
-        }],
-      }
-    }
-
-    if (!await bcrypt.compare(password, user.password)) {
-      return {
-        errors: [{
-          type: 'signIn.password.invalid',
-          path: ['password'],
-          message: 'invalid',
-        }],
-      }
-    }
-
-    return {
-      payload: {
-        token: createToken(user),
-      },
-    }
-  },
-}
-
 export const resolvers = {
   Query,
-  Mutation,
   User: {
     email: (user, args, { me }) => {
       if (user.id === me.id) {
