@@ -1,7 +1,7 @@
 import { AuthenticationError } from 'apollo-server'
 import _ from 'lodash/fp'
 
-import { applyInterceptor } from './core'
+import { applyInterceptor } from '../core'
 
 import * as ProductDefinitions from './product/Definitions'
 import * as UserDefinitions from './user/Definitions'
