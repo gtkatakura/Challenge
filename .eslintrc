@@ -6,6 +6,8 @@
     "no-console": "off",
     "no-plusplus": "off",
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "react/prefer-stateless-function": "off",
+    "react/jsx-filename-extension": "off"
   }
 }
