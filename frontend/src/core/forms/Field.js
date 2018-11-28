@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextInput, Text } from 'react-native'
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import PropTypes from 'prop-types'
 
 import Form from './Form'
@@ -21,9 +21,10 @@ class Field extends Component {
 
     return (
       <>
-        <TextInput onChangeText={this.handleChange} {...props} />
+        <FormLabel>{name}</FormLabel>
+        <FormInput onChangeText={this.handleChange} {...props} />
         {error && (
-          <Text style={{ color: 'red' }}>{error.toString()}</Text>
+          <FormValidationMessage>{error.toString()}</FormValidationMessage>
         )}
       </>
     )

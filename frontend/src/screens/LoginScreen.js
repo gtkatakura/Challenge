@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
-import { StyleSheet, View, Button } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Button } from 'react-native-elements'
 
 import { Form, Field } from '../core/forms'
 
@@ -43,14 +44,13 @@ class LoginScreen extends Component {
         <Mutation mutation={SignInMutation}>
           {signIn => (
             <View style={styles.container}>
-              <Field name="email" placeholder="email" />
-              <Field name="password" placeholder="password" secureTextEntry />
+              <Field name="EMAIL" placeholder="Please enter your email..." />
+              <Field name="PASSWORD" placeholder="Please enter your pasword..." secureTextEntry />
 
               <Form.Consumer>
                 {({ values, setErrors }) => (
                   <Button
                     title="LOGIN"
-                    color="green"
                     onPress={async () => {
                       const {
                         data: {
