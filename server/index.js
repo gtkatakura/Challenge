@@ -5,7 +5,19 @@ import config from './config'
 
 import { schema } from './src/schema'
 
+const logging = process.env.NODE_ENV === 'development' ? {
+  formatError: (error) => {
+    console.log(error)
+    return error
+  },
+  formatResponse: (response) => {
+    console.log(response)
+    return response
+  },
+} : {}
+
 const server = new ApolloServer({
+  ...logging,
   schema,
   context: async ({ req }) => {
     const { token } = req.headers
