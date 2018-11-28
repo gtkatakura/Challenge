@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "start:android": "react-native run-android",
+    "start:android": "npm run start:android:ports && react-native run-android",
+    "start:android:ports": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:4000 tcp:4000",
     "test": "jest"
   },
   "dependencies": {
