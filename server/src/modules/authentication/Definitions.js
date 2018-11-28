@@ -76,7 +76,7 @@ const Mutation = {
       }
     }
 
-    if (!await bcrypt.compare(password, user.password)) {
+    if (!password || !await bcrypt.compare(password, user.password)) {
       return {
         errors: [{
           type: 'signIn.password.invalid',

@@ -7,7 +7,10 @@
     "no-plusplus": "off",
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
     "semi": ["error", "never"],
+    "react/destructuring-assignment": "off",
     "react/prefer-stateless-function": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "react/no-unused-state": "off",
+    "react/sort-comp": "off"
   }
 }
