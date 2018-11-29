@@ -8,7 +8,7 @@ import { Field } from '../../core/forms'
 
 import {
   SignButton,
-  Form,
+  SignForm,
   EmailField,
   PasswordField,
 } from './components'
@@ -61,14 +61,14 @@ class SignUpScreen extends Component {
 
   render() {
     return (
-      <Form>
+      <SignForm>
         <NameField />
         <EmailField />
         <PasswordField />
         <SignUpButton />
         <Text style={styles.dividerText}>OR</Text>
         <Button title="SIGN IN" onPress={() => this.props.navigation.navigate('SignIn')} />
-      </Form>
+      </SignForm>
     )
   }
 }

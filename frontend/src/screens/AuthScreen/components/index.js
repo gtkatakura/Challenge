@@ -9,5 +9,5 @@ export const PasswordField = () => (
   <Field name="password" label="PASSWORD" placeholder="Password" secureTextEntry />
 )
 
-export { default as Form } from './Form'
+export { default as SignForm } from './SignForm'
 export { default as SignButton } from './SignButton'

@@ -4,7 +4,7 @@ import { gql } from 'apollo-boost'
 
 import {
   SignButton,
-  Form,
+  SignForm,
   EmailField,
   PasswordField,
 } from './components'
@@ -43,11 +43,11 @@ class SignInScreen extends Component {
 
   render() {
     return (
-      <Form>
+      <SignForm>
         <EmailField />
         <PasswordField />
         <SignInButton />
-      </Form>
+      </SignForm>
     )
   }
 }
