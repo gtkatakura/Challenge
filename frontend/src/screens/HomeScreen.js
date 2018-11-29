@@ -1,7 +1,26 @@
 import React, { Component } from 'react'
-import { Button } from 'react-native-elements'
+import { Query } from 'react-apollo'
+import { gql } from 'apollo-boost'
+import { ScrollView } from 'react-native'
+import {
+  Avatar, SearchBar, List, ListItem,
+} from 'react-native-elements'
 
 import { withAuthentication } from '../services'
+
+const ProductCollectionQuery = gql`
+  query ProductCollectionQuery {
+    products {
+      payload {
+        id
+        name
+      }
+      hasMore
+    }
+  }
+`
+
+const firstLetters = text => text.split(' ').map(word => word[0]).join('')
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -15,10 +34,29 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <Button
-        title="Logout"
-        onPress={this.logout}
-      />
+      <Query query={ProductCollectionQuery}>
+        {({ data }) => (
+          <>
+            <SearchBar placeholder="Type here..." lightTheme />
+            <ScrollView>
+              <List>
+                {data && data.products && data.products.payload.map(product => (
+                  <ListItem
+                    key={product.id}
+                    avatar={(
+                      <Avatar
+                        title={firstLetters(product.name)}
+                        rounded
+                      />
+                    )}
+                    title={product.name}
+                  />
+                ))}
+              </List>
+            </ScrollView>
+          </>
+        )}
+      </Query>
     )
   }
 }
