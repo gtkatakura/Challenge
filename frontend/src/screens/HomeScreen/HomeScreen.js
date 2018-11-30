@@ -59,7 +59,7 @@ class HomeScreen extends Component {
   })
 
   loadMore = async () => {
-    if (!this.state.products.hasMore) {
+    if (!this.state.products.hasMore || this.state.loadingMore) {
       return
     }
 
@@ -80,7 +80,10 @@ class HomeScreen extends Component {
     this.setState(prevState => ({
       products: {
         ...products,
-        payload: prevState.products.payload.concat(products.payload),
+        payload: [
+          ...prevState.products.payload,
+          ...products.payload,
+        ],
       },
     }))
 
