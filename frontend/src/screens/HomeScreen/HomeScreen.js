@@ -10,8 +10,8 @@ import _ from 'lodash/fp'
 import { withAuthentication } from '../../services'
 
 const ProductCollectionQuery = gql`
-  query ProductCollectionQuery($after: ID) {
-    products(after: $after) {
+  query ProductCollectionQuery($search: String, $after: ID) {
+    products(search: $search, after: $after) {
       payload {
         id
         name
@@ -29,6 +29,7 @@ class HomeScreen extends Component {
   }
 
   state = {
+    search: '',
     products: {
       payload: [],
     },
@@ -39,6 +40,23 @@ class HomeScreen extends Component {
     await this.props.authentication.reset()
     this.props.navigation.navigate('Auth')
   }
+
+  initialLoad = async () => {
+    const { data: { products } } = await this.props.client.query({
+      query: ProductCollectionQuery,
+      variables: {
+        search: this.state.search,
+      },
+    })
+
+    this.setState({
+      products,
+    })
+  }
+
+  updateSearch = _.debounce(100, (search) => {
+    this.setState({ search }, this.initialLoad)
+  })
 
   loadMore = async () => {
     if (!this.state.products.hasMore) {
@@ -54,6 +72,7 @@ class HomeScreen extends Component {
     const { data: { products } } = await this.props.client.query({
       query: ProductCollectionQuery,
       variables: {
+        search: this.state.search,
         after: lastProduct.id,
       },
     })
@@ -70,20 +89,18 @@ class HomeScreen extends Component {
     })
   }
 
-  async componentDidMount() {
-    const { data: { products } } = await this.props.client.query({
-      query: ProductCollectionQuery,
-    })
-
-    this.setState({
-      products,
-    })
+  componentDidMount() {
+    this.initialLoad()
   }
 
   render() {
     return (
       <>
-        <SearchBar placeholder="Type here..." lightTheme />
+        <SearchBar
+          onChangeText={this.updateSearch}
+          placeholder="Type here..."
+          lightTheme
+        />
         <FlatList
           data={this.state.products.payload}
           keyExtractor={_.get('id')}

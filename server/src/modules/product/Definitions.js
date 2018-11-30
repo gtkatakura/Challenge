@@ -26,7 +26,7 @@ export const typeDefs = `
 `
 
 export const queries = `
-  products(first: Int = 20, after: ID): ProductCollection
+  products(search: String, first: Int = 20, after: ID): ProductCollection
 `
 
 export const mutations = `
@@ -34,8 +34,15 @@ export const mutations = `
 `
 
 const Query = {
-  products: async (root, { first, after }) => {
-    const { items, hasMore } = await Product.Model.paginate({}, {
+  products: async (root, { search, first, after }) => {
+    const query = !search ? {} : {
+      name: {
+        $regex: new RegExp(search),
+        $options: 'i',
+      },
+    }
+
+    const { items, hasMore } = await Product.Model.paginate(query, {
       sort: { _id: 1 },
       limit: first,
       startingAfter: after,
