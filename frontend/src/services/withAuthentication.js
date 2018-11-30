@@ -1,4 +1,5 @@
 import React from 'react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 import { AsyncStorage } from 'react-native'
 
 const authentication = {
@@ -7,11 +8,11 @@ const authentication = {
   reset: () => AsyncStorage.removeItem('@general:token'),
 }
 
-const withAuthentication = WrappedComponent => props => (
+const withAuthentication = WrappedComponent => hoistNonReactStatics(props => (
   <WrappedComponent
     authentication={authentication}
     {...props}
   />
-)
+), WrappedComponent)
 
 export default withAuthentication

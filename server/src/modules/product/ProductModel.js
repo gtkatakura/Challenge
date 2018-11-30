@@ -20,7 +20,7 @@ export const Model = database.model('Product', ProductSchema)
 
 const validationSchema = Joi.object().keys({
   name: Joi.string().required().min(3),
-  price: Joi.number().required().integer().positive(),
+  price: Joi.number().required().positive(),
 })
 
 const customSchema = {

@@ -1,20 +1,26 @@
 import React, { Component } from 'react'
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { createStackNavigator, createMaterialTopTabNavigator, createAppContainer } from 'react-navigation'
 
 import ApolloProvider from './components/ApolloProvider'
 
 import AppScreen from './screens/AppScreen'
-import HomeScreen from './screens/HomeScreen'
 import SignInScreen from './screens/AuthScreen/SignInScreen'
 import SignUpScreen from './screens/AuthScreen/SignUpScreen'
-
-const HomeStack = createStackNavigator({ Home: HomeScreen })
+import ListScreen from './screens/ListScreen'
+import CreateScreen from './screens/CreateScreen'
 
 const AuthStack = createStackNavigator({
   SignIn: SignInScreen,
   SignUp: SignUpScreen,
 }, {
   initialRouteName: 'SignUp',
+})
+
+const HomeStack = createMaterialTopTabNavigator({
+  List: ListScreen,
+  Create: CreateScreen,
+}, {
+  initialRouteName: 'List',
 })
 
 const StackNavigator = createStackNavigator({
