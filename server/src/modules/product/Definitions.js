@@ -96,16 +96,13 @@ const Mutation = {
       return { errors }
     }
 
-    const { stream, filename } = await input.photo
+    // const { stream, filename } = await input.photo
 
-    const file = await Storage.upload({ filename, stream })
+    // const file = await Storage.upload({ filename, stream })
 
     const product = await Product.Model.findById(input.id)
 
-    product.set({
-      photoId: file._id, // eslint-disable-line no-underscore-dangle
-      ...input,
-    })
+    product.set(input)
 
     await product.save()
 

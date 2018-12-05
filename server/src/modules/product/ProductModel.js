@@ -20,6 +20,7 @@ ProductSchema.plugin(paginationPlugin)
 export const Model = database.model('Product', ProductSchema)
 
 const validationSchema = Joi.object().keys({
+  id: Joi.string().optional(),
   name: Joi.string().required().min(3),
   price: Joi.number().required().positive(),
   photo: Joi.any().required(),
