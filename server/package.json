@@ -4,10 +4,11 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon index.js"
+    "start": "cross-env NODE_ENV=development PORT=4000 nodemon index.js"
   },
   "dependencies": {
     "apollo-server": "^2.1.0",
+    "apollo-server-koa": "^2.2.5",
     "bcrypt": "^3.0.2",
     "convict": "^4.4.0",
     "cross-env": "^5.2.0",
@@ -16,11 +17,16 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "^4.0.3",
     "graphql-type-json": "^0.2.1",
+    "graphql-upload": "^8.0.2",
     "joi": "^14.1.0",
     "jsonwebtoken": "^8.4.0",
+    "koa": "^2.6.2",
+    "koa-router": "^7.4.0",
     "lodash": "^4.17.11",
+    "mongodb": "^3.1.10",
     "mongoose": "^5.3.13",
-    "mongoose-cursor-pagination": "^1.0.1"
+    "mongoose-cursor-pagination": "^1.0.1",
+    "mongoose-gridfs": "^0.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { Form, Field } from '../../core/forms'
+import { Form, Field, ImagePickerField } from '../../core/forms'
 import { SaveButton } from './components'
 
 const styles = StyleSheet.create({
@@ -21,6 +21,7 @@ class CreateScreen extends Component {
     return (
       <Form>
         <View style={styles.container}>
+          <ImagePickerField name="photo" />
           <Field name="name" label="NAME" placeholder="Name" />
           <Field keyboardType="numeric" name="price" label="PRICE" placeholder="Price" />
           <SaveButton />

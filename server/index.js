@@ -1,9 +1,31 @@
-import { ApolloServer, AuthenticationError } from 'apollo-server'
+import { AuthenticationError } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-koa'
+import { graphqlUploadKoa } from 'graphql-upload'
+import Koa from 'koa'
+import Router from 'koa-router'
 import jwt from 'jsonwebtoken'
 
 import config from './config'
 
 import { schema } from './src/schema'
+import Storage from './src/core/Storage'
+
+const app = new Koa()
+const router = new Router()
+
+app.use(
+  graphqlUploadKoa({
+    maxFileSize: 10000000, // 10 MB
+    maxFiles: 20,
+  }),
+)
+
+app.use(router.routes())
+
+router.get('/files/:id', (ctx) => {
+  ctx.type = 'image/jpg'
+  ctx.body = Storage.download(ctx.params.id)
+})
 
 const logging = process.env.NODE_ENV === 'development' ? {
   formatError: (error) => {
@@ -19,8 +41,8 @@ const logging = process.env.NODE_ENV === 'development' ? {
 const server = new ApolloServer({
   ...logging,
   schema,
-  context: async ({ req }) => {
-    const { token } = req.headers
+  context: async ({ ctx }) => {
+    const { token } = ctx.request.header
 
     if (token) {
       try {
@@ -34,8 +56,13 @@ const server = new ApolloServer({
 
     return {}
   },
+  uploads: false,
 })
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`)
+server.applyMiddleware({ app })
+
+app.listen(process.env.PORT, () => {
+  console.log(
+    `Serving http://localhost:${process.env.PORT} for ${process.env.NODE_ENV}.`,
+  )
 })

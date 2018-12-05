@@ -8,6 +8,7 @@ const ProductSchema = new Schema(
   {
     name: String,
     price: Number,
+    photoId: Schema.Types.ObjectId,
   },
   {
     timestamps: true,
@@ -21,6 +22,7 @@ export const Model = database.model('Product', ProductSchema)
 const validationSchema = Joi.object().keys({
   name: Joi.string().required().min(3),
   price: Joi.number().required().positive(),
+  photo: Joi.any().required(),
 })
 
 const customSchema = {

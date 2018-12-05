@@ -1,10 +1,12 @@
 import * as Product from './ProductModel'
+import Storage from '../../core/Storage'
 
 export const typeDefs = `
   type Product implements Model {
     id: ID
     name: String
     price: Float
+    photo: Attachment
     createdAt: DateTime
     updatedAt: DateTime
   }
@@ -17,6 +19,7 @@ export const typeDefs = `
   input ProductInput {
     name: String
     price: Float
+    photo: Upload
   }
 
   type ProductEvent {
@@ -63,7 +66,14 @@ const Mutation = {
       return { errors }
     }
 
-    const product = new Product.Model(input)
+    const { stream, filename } = await input.photo
+
+    const file = await Storage.upload({ filename, stream })
+
+    const product = new Product.Model({
+      photoId: file._id, // eslint-disable-line no-underscore-dangle
+      ...input,
+    })
 
     await product.save()
 
@@ -73,4 +83,10 @@ const Mutation = {
   },
 }
 
-export const resolvers = { Query, Mutation }
+export const resolvers = {
+  Query,
+  Mutation,
+  Product: {
+    photo: product => ({ id: product.photoId.toString() }),
+  },
+}

@@ -15,13 +15,14 @@ const ProductCollectionQuery = gql`
       payload {
         id
         name
+        photo {
+          uri
+        }
       }
       hasMore
     }
   }
 `
-
-const firstLetters = text => text.split(' ').map(word => word[0]).join('')
 
 class ListScreen extends Component {
   static navigationOptions = {
@@ -112,8 +113,8 @@ class ListScreen extends Component {
               key={product.id}
               avatar={(
                 <Avatar
-                  title={firstLetters(product.name)}
-                  rounded
+                  source={product.photo}
+                  large
                 />
               )}
               title={product.name}
