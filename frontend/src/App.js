@@ -8,6 +8,7 @@ import SignInScreen from './screens/AuthScreen/SignInScreen'
 import SignUpScreen from './screens/AuthScreen/SignUpScreen'
 import ListScreen from './screens/ListScreen'
 import CreateScreen from './screens/CreateScreen'
+import EditScreen from './screens/EditScreen'
 
 const AuthStack = createStackNavigator({
   SignIn: SignInScreen,
@@ -27,6 +28,7 @@ const StackNavigator = createStackNavigator({
   App: AppScreen,
   Home: HomeStack,
   Auth: AuthStack,
+  Edit: EditScreen,
 }, {
   initialRouteName: 'App',
   headerMode: 'none',

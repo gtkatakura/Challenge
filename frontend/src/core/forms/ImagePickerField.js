@@ -36,7 +36,7 @@ class ImagePickerField extends Component {
   static contextType = Form.Context
 
   state = {
-    image: null,
+    image: this.context.values[this.props.name],
   }
 
   handleChange = (value) => {

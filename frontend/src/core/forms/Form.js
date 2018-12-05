@@ -14,6 +14,14 @@ class Form extends Component {
     children: PropTypes.node.isRequired,
   }
 
+  static propTypes = {
+    initialValues: PropTypes.shape({}),
+  }
+
+  static defaultProps = {
+    initialValues: {},
+  }
+
   update = (name, value) => this.setState(({ values }) => ({
     values: {
       ...values,
@@ -24,7 +32,7 @@ class Form extends Component {
   setErrors = errors => this.setState({ errors })
 
   state = {
-    values: {},
+    values: this.props.initialValues,
     errors: {},
     update: this.update,
     setErrors: this.setErrors,

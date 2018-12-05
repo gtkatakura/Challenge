@@ -15,6 +15,7 @@ const ProductCollectionQuery = gql`
       payload {
         id
         name
+        price
         photo {
           uri
         }
@@ -118,6 +119,8 @@ class ListScreen extends Component {
                 />
               )}
               title={product.name}
+              onPress={() => this.props.navigation.navigate('Edit', { product })}
+              onPressRightIcon={() => this.props.navigation.navigate('Edit', { product })}
             />
           )}
           onEndReached={this.loadMore}

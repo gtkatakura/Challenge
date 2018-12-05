@@ -17,12 +17,13 @@ class Field extends Component {
 
   render() {
     const { name, label, ...props } = this.props
+    const value = this.context.values[name]
     const error = this.context.errors[name]
 
     return (
       <>
         <FormLabel>{label}</FormLabel>
-        <FormInput onChangeText={this.handleChange} {...props} />
+        <FormInput onChangeText={this.handleChange} value={value && value.toString()} {...props} />
         {error && (
           <FormValidationMessage>{error.toString()}</FormValidationMessage>
         )}

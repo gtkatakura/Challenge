@@ -26,6 +26,13 @@ export const typeDefs = `
     payload: Product
     errors: [Error]
   }
+
+  input ProductUpdateInput {
+    id: ID
+    name: String
+    price: Float
+    photo: Upload
+  }
 `
 
 export const queries = `
@@ -34,6 +41,7 @@ export const queries = `
 
 export const mutations = `
   createProduct(input: ProductInput!): ProductEvent
+  updateProduct(input: ProductUpdateInput!): ProductEvent
 `
 
 const Query = {
@@ -71,6 +79,30 @@ const Mutation = {
     const file = await Storage.upload({ filename, stream })
 
     const product = new Product.Model({
+      photoId: file._id, // eslint-disable-line no-underscore-dangle
+      ...input,
+    })
+
+    await product.save()
+
+    return {
+      payload: product,
+    }
+  },
+  updateProduct: async (root, { input }) => {
+    const errors = await Product.validate(input)
+
+    if (errors) {
+      return { errors }
+    }
+
+    const { stream, filename } = await input.photo
+
+    const file = await Storage.upload({ filename, stream })
+
+    const product = await Product.Model.findById(input.id)
+
+    product.set({
       photoId: file._id, // eslint-disable-line no-underscore-dangle
       ...input,
     })
