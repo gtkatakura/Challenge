@@ -88,7 +88,7 @@ class ImagePickerField extends Component {
             {this.state.image === null ? (
               <Text>Select a Photo</Text>
             ) : (
-              <Image style={styles.image} sourcec={this.state.image} />
+              <Image style={styles.image} source={this.state.image} />
             )}
           </View>
           {error && (
