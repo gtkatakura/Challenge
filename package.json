@@ -8,6 +8,7 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.1",
     "eslint-plugin-react": "7.11.0",
+    "graphqlviz": "^2.1.0",
     "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
     "madge": "^3.3.0",
@@ -17,6 +18,7 @@
   "scripts": {
     "resources:generate:frontend": "madge frontend --image resources/madge/frontend.svg",
     "resources:generate:server": "madge server --image resources/madge/server.svg",
+    "resources:generate:graphql": "graphqlviz server/__generated__/schema.json | dot -Tpng -o resources/graphqlviz.png",
     "resources:generate": "run-p resources:generate:**"
   },
   "lint-staged": {
@@ -27,7 +29,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged && yarn run resources:generate && git add resources/madge"
+      "pre-commit": "lint-staged && yarn run resources:generate && git add resources"
     }
   }
 }

@@ -1,10 +1,6 @@
-# GraphQL - Query
+# GraphQL
 
-![alt text](resources/GraphQLVoyager-QueryRoot.png)
-
-# GraphQL - Mutation
-
-![alt text](resources/GraphQLVoyager-MutationRoot.png)
+![](resources/graphqlviz.png)
 
 # File Dependencies
 
