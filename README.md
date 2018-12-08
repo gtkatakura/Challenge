@@ -1,6 +1,6 @@
 # GraphQL
 
-![](resources/graphqlviz.png)
+![](resources/graphqlviz.svg)
 
 # File Dependencies
 

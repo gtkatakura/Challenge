@@ -18,7 +18,7 @@
   "scripts": {
     "resources:generate:frontend": "madge frontend --image resources/madge/frontend.svg",
     "resources:generate:server": "madge server --image resources/madge/server.svg",
-    "resources:generate:graphql": "graphqlviz server/__generated__/schema.json | dot -Tpng -o resources/graphqlviz.png",
+    "resources:generate:graphql": "graphqlviz server/__generated__/schema.json | dot -Tsvg -o resources/graphqlviz.svg",
     "resources:generate": "run-p resources:generate:**"
   },
   "lint-staged": {
