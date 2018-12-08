@@ -16,10 +16,11 @@
     "prettier": "^1.15.2"
   },
   "scripts": {
+    "schema:update": "cd server && yarn run schema:update && cd ..",
     "resources:generate:frontend": "madge frontend --image resources/madge/frontend.svg",
     "resources:generate:server": "madge server --image resources/madge/server.svg",
     "resources:generate:graphql": "graphqlviz server/__generated__/schema.json | dot -Tsvg -o resources/graphqlviz.svg",
-    "resources:generate": "run-p resources:generate:**"
+    "resources:generate": "yarn run schema:update && run-p resources:generate:**"
   },
   "lint-staged": {
     "*.(json|yml|md)": ["prettier --write", "git add"],
