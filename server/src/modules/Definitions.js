@@ -21,6 +21,7 @@ const schemaDefinition = `
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 
   type Query {
@@ -29,6 +30,10 @@ const schemaDefinition = `
 
   type Mutation {
     ${_.map('mutations', definitions).join('')}
+  }
+
+  type Subscription {
+    ${_.map('subscriptions', definitions).join('')}
   }
 `
 

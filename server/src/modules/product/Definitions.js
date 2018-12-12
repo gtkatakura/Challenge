@@ -1,5 +1,10 @@
+import { PubSub, withFilter } from 'apollo-server'
+import _ from 'lodash/fp'
+
 import * as Product from './ProductModel'
 import Storage from '../../core/Storage'
+
+const pubsub = new PubSub()
 
 export const typeDefs = `
   type Product implements Model {
@@ -33,6 +38,12 @@ export const typeDefs = `
     price: Float
     photo: Upload
   }
+
+  input ProductFilterObject {
+    id: ID
+    name: String
+    price: Float
+  }
 `
 
 export const queries = `
@@ -42,6 +53,10 @@ export const queries = `
 export const mutations = `
   createProduct(input: ProductInput!): ProductEvent
   updateProduct(input: ProductUpdateInput!): ProductEvent
+`
+
+export const subscriptions = `
+  productUpdated(where: ProductFilterObject): Product
 `
 
 const Query = {
@@ -68,7 +83,7 @@ const Query = {
 
 const Mutation = {
   createProduct: async (root, { input }) => {
-    const errors = await Product.validate(input)
+    const errors = await Product.validate({ id: null, ...input })
 
     if (errors) {
       return { errors }
@@ -106,15 +121,30 @@ const Mutation = {
 
     await product.save()
 
+    pubsub.publish('PRODUCT_UPDATED', { productUpdated: product })
+
     return {
       payload: product,
     }
   },
 }
 
+const Subscription = {
+  productUpdated: {
+    subscribe: withFilter(
+      () => pubsub.asyncIterator(['PRODUCT_UPDATED']),
+      ({ productUpdated: product }, { where }) => _.isEqual(
+        _.pick(_.keys(where), product),
+        where,
+      ),
+    ),
+  },
+}
+
 export const resolvers = {
   Query,
   Mutation,
+  Subscription,
   Product: {
     photo: product => ({ id: product.photoId.toString() }),
   },

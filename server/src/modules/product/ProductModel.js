@@ -19,11 +19,17 @@ ProductSchema.plugin(paginationPlugin)
 
 export const Model = database.model('Product', ProductSchema)
 
+const requiredWhenCreate = field => field.when('id', {
+  is: null,
+  then: Joi.any().required(),
+  otherwise: Joi.any().optional(),
+})
+
 const validationSchema = Joi.object().keys({
-  id: Joi.string().optional(),
-  name: Joi.string().required().min(3),
-  price: Joi.number().required().positive(),
-  photo: Joi.any().required(),
+  id: Joi.alternatives([Joi.string(), Joi.any().valid([null])]),
+  name: requiredWhenCreate(Joi.string().min(3)),
+  price: requiredWhenCreate(Joi.number().positive()),
+  photo: requiredWhenCreate(Joi.any()),
 })
 
 const customSchema = {
@@ -34,4 +40,3 @@ export const validate = validateFromJoiSchema(validationSchema, {
   schema: customSchema,
   context: { Model },
 })
-

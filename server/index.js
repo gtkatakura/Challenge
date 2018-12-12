@@ -1,6 +1,8 @@
 import { AuthenticationError } from 'apollo-server'
 import { ApolloServer } from 'apollo-server-koa'
 import { graphqlUploadKoa } from 'graphql-upload'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
+import { execute, subscribe } from 'graphql'
 import Koa from 'koa'
 import Router from 'koa-router'
 import jwt from 'jsonwebtoken'
@@ -61,8 +63,29 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app })
 
-app.listen(process.env.PORT, () => {
+const koaServer = app.listen(process.env.PORT, () => {
   console.log(
     `Serving http://localhost:${process.env.PORT} for ${process.env.NODE_ENV}.`,
   )
 })
+
+SubscriptionServer.create(
+  {
+    schema,
+    execute,
+    subscribe,
+    onConnect: async ({ token }) => {
+      if (token) {
+        const me = await jwt.verify(token, config.get('jwt.secret'))
+
+        return { me }
+      }
+
+      return {}
+    },
+  },
+  {
+    server: koaServer,
+    path: '/graphql',
+  },
+)

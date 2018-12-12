@@ -27,7 +27,8 @@
     "mongodb": "^3.1.10",
     "mongoose": "^5.3.13",
     "mongoose-cursor-pagination": "^1.0.1",
-    "mongoose-gridfs": "^0.5.0"
+    "mongoose-gridfs": "^0.5.0",
+    "subscriptions-transport-ws": "^0.9.15"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
