@@ -6,6 +6,7 @@ import {
   Avatar, SearchBar, ListItem,
 } from 'react-native-elements'
 import _ from 'lodash/fp'
+import i18n from 'i18n-js'
 
 import { withAuthentication } from '../../services'
 
@@ -119,6 +120,7 @@ class ListScreen extends Component {
                 />
               )}
               title={product.name}
+              subtitle={i18n.l('currency', product.price)}
               onPress={() => this.props.navigation.navigate('Edit', { product })}
               onPressRightIcon={() => this.props.navigation.navigate('Edit', { product })}
             />
