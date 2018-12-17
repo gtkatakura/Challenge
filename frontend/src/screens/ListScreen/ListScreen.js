@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import { withApollo } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import { ActivityIndicator, FlatList } from 'react-native'
-import {
-  Avatar, SearchBar, ListItem,
-} from 'react-native-elements'
+import { SearchBar } from 'react-native-elements'
 import _ from 'lodash/fp'
-import i18n from 'i18n-js'
 
 import { withAuthentication } from '../../services'
+import { ProductItem } from './components'
 
 const ProductCollectionQuery = gql`
   query ProductCollectionQuery($search: String, $after: ID) {
@@ -111,18 +109,10 @@ class ListScreen extends Component {
           data={this.state.products.payload}
           keyExtractor={_.get('id')}
           renderItem={({ item: product }) => (
-            <ListItem
+            <ProductItem
               key={product.id}
-              avatar={(
-                <Avatar
-                  source={product.photo}
-                  large
-                />
-              )}
-              title={product.name}
-              subtitle={i18n.l('currency', product.price)}
-              onPress={() => this.props.navigation.navigate('Edit', { product })}
-              onPressRightIcon={() => this.props.navigation.navigate('Edit', { product })}
+              product={product}
+              navigation={this.props.navigation}
             />
           )}
           onEndReached={this.loadMore}

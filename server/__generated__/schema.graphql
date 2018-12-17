@@ -54,6 +54,12 @@ type ProductEvent {
   errors: [Error]
 }
 
+input ProductFilterObject {
+  id: ID
+  name: String
+  price: Float
+}
+
 input ProductInput {
   name: String
   price: Float
@@ -96,6 +102,10 @@ input SignUpInput {
   name: String
   email: String
   password: String
+}
+
+type Subscription {
+  productUpdated(where: ProductFilterObject): Product
 }
 
 """The `Upload` scalar type represents a file upload."""

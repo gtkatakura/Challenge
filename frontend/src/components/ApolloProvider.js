@@ -6,8 +6,10 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import { onError } from 'apollo-link-error'
-import { ApolloLink } from 'apollo-link'
+import { ApolloLink, split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
 import { createUploadLink } from 'apollo-upload-client'
+import { getMainDefinition } from 'apollo-utilities'
 
 const errorHandlerLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -36,11 +38,39 @@ const uploadLink = createUploadLink({
   uri: 'http://localhost:4000/graphql',
 })
 
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:4000/graphql',
+  options: {
+    reconnect: true,
+  },
+})
+
+const subscriptionMiddleware = {
+  async applyMiddleware(options, next) {
+    Object.assign(options, {
+      token: await AsyncStorage.getItem('@general:token'),
+    })
+
+    next()
+  },
+}
+
+wsLink.subscriptionClient.use([subscriptionMiddleware])
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query)
+    return kind === 'OperationDefinition' && operation === 'subscription'
+  },
+  wsLink,
+  uploadLink,
+)
+
 const client = new ApolloClient({
   link: ApolloLink.from([
     errorHandlerLink,
     authLink,
-    uploadLink,
+    link,
   ]),
   cache: new InMemoryCache(),
   credentials: 'same-origin',

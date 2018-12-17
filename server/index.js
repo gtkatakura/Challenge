@@ -83,6 +83,22 @@ SubscriptionServer.create(
 
       return {}
     },
+    onOperation: async (message, params) => {
+      const { token } = message.payload
+
+      if (token) {
+        const me = await jwt.verify(token, config.get('jwt.secret'))
+
+        return {
+          ...params,
+          context: {
+            ...params.context,
+            me,
+          },
+        }
+      }
+      return params
+    },
   },
   {
     server: koaServer,
