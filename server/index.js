@@ -40,24 +40,24 @@ const logging = process.env.NODE_ENV === 'development' ? {
   },
 } : {}
 
+const createContext = async ({ token }) => {
+  if (token) {
+    try {
+      return {
+        me: await jwt.verify(token, config.get('jwt.secret')),
+      }
+    } catch {
+      throw new AuthenticationError('Your session expired. Sign in again.')
+    }
+  }
+
+  return {}
+}
+
 const server = new ApolloServer({
   ...logging,
   schema,
-  context: async ({ ctx }) => {
-    const { token } = ctx.request.header
-
-    if (token) {
-      try {
-        return {
-          me: await jwt.verify(token, config.get('jwt.secret')),
-        }
-      } catch {
-        throw new AuthenticationError('Your session expired. Sign in again.')
-      }
-    }
-
-    return {}
-  },
+  context: ({ ctx }) => createContext(ctx.request.header),
   uploads: false,
 })
 
@@ -74,31 +74,14 @@ SubscriptionServer.create(
     schema,
     execute,
     subscribe,
-    onConnect: async ({ token }) => {
-      if (token) {
-        const me = await jwt.verify(token, config.get('jwt.secret'))
-
-        return { me }
-      }
-
-      return {}
-    },
-    onOperation: async (message, params) => {
-      const { token } = message.payload
-
-      if (token) {
-        const me = await jwt.verify(token, config.get('jwt.secret'))
-
-        return {
-          ...params,
-          context: {
-            ...params.context,
-            me,
-          },
-        }
-      }
-      return params
-    },
+    onConnect: createContext,
+    onOperation: async (message, params) => ({
+      ...params,
+      context: {
+        ...params.context,
+        ...await createContext(message.payload),
+      },
+    }),
   },
   {
     server: koaServer,
