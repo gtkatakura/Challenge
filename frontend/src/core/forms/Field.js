@@ -17,7 +17,7 @@ class Field extends Component {
 
   handleChange = value => this.update(value)
 
-  handleBlur = () => this.update(this.getValue().trim())
+  handleBlur = () => this.update(this.getValue() && this.getValue().toString().trim())
 
   render() {
     const { name, label, ...props } = this.props

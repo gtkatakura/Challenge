@@ -45,6 +45,7 @@ class ListScreen extends Component {
   initialLoad = async () => {
     const { data: { products } } = await this.props.client.query({
       query: ProductCollectionQuery,
+      fetchPolicy: 'no-cache',
       variables: {
         search: this.state.search,
       },
@@ -72,6 +73,7 @@ class ListScreen extends Component {
 
     const { data: { products } } = await this.props.client.query({
       query: ProductCollectionQuery,
+      fetchPolicy: 'no-cache',
       variables: {
         search: this.state.search,
         after: lastProduct.id,
