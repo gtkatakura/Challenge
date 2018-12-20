@@ -6,6 +6,7 @@
     "no-console": "off",
     "no-plusplus": "off",
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
+    "no-underscore-dangle": "off",
     "semi": ["error", "never"],
     "react/destructuring-assignment": "off",
     "react/prefer-stateless-function": "off",
@@ -13,5 +14,8 @@
     "react/jsx-filename-extension": "off",
     "react/no-unused-state": "off",
     "react/sort-comp": "off"
+  },
+  "env": {
+    "jest": true
   }
 }
