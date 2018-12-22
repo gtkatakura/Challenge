@@ -4,22 +4,32 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "cross-env NODE_ENV=development PORT=4000 nodemon index.js",
+    "schema:update": "babel-node scripts/updateSchema.js",
+    "test": "jest"
   },
   "dependencies": {
     "apollo-server": "^2.1.0",
+    "apollo-server-koa": "^2.2.5",
     "bcrypt": "^3.0.2",
     "convict": "^4.4.0",
+    "cross-env": "^5.2.0",
     "dotenv": "^6.1.0",
     "graphql": "^14.0.2",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "^4.0.3",
     "graphql-type-json": "^0.2.1",
+    "graphql-upload": "^8.0.2",
     "joi": "^14.1.0",
     "jsonwebtoken": "^8.4.0",
+    "koa": "^2.6.2",
+    "koa-router": "^7.4.0",
     "lodash": "^4.17.11",
+    "mongodb": "^3.1.10",
     "mongoose": "^5.3.13",
-    "mongoose-cursor-pagination": "^1.0.1"
+    "mongoose-cursor-pagination": "^1.0.1",
+    "mongoose-gridfs": "^0.5.0",
+    "subscriptions-transport-ws": "^0.9.15"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -27,6 +37,15 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@types/mongoose": "^5.3.1",
+    "jest": "^23.6.0",
+    "jest-environment-node": "^23.4.0",
+    "mongodb-memory-server": "^2.9.0",
     "nodemon": "^1.18.4"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

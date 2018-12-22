@@ -3,6 +3,7 @@ import _ from 'lodash/fp'
 
 import { applyInterceptor } from '../core'
 
+import * as AttachmentDefinitions from './attachment/Definitions'
 import * as ProductDefinitions from './product/Definitions'
 import * as UserDefinitions from './user/Definitions'
 import * as AuthenticationDefinitions from './authentication/Definitions'
@@ -10,6 +11,7 @@ import * as AuthenticationDefinitions from './authentication/Definitions'
 const mergeAllBy = (iteratee, objects) => _.mergeAll(_.map(iteratee, objects))
 
 const definitions = [
+  AttachmentDefinitions,
   AuthenticationDefinitions,
   ProductDefinitions,
   UserDefinitions,
@@ -19,6 +21,7 @@ const schemaDefinition = `
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 
   type Query {
@@ -27,6 +30,10 @@ const schemaDefinition = `
 
   type Mutation {
     ${_.map('mutations', definitions).join('')}
+  }
+
+  type Subscription {
+    ${_.map('subscriptions', definitions).join('')}
   }
 `
 

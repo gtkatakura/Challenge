@@ -1,11 +1,19 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import Joi from 'joi'
 
 import config from '../../../config'
+
+import { validateFromJoiSchema } from '../../core'
 
 import * as User from '../user/UserModel'
 
 const createToken = ({ id, email, name }) => jwt.sign({ id, email, name }, config.get('jwt.secret'))
+
+const signInValidationSchema = validateFromJoiSchema(Joi.object().keys({
+  email: Joi.string().required().email(),
+  password: Joi.string().required(),
+}))
 
 export const typeDefs = `
   input SignUpInput {
@@ -64,6 +72,12 @@ const Mutation = {
     }
   },
   signIn: async (root, { input: { email, password } }) => {
+    const errors = await signInValidationSchema({ email, password })
+
+    if (errors) {
+      return { errors }
+    }
+
     const user = await User.Model.findOne({ email })
 
     if (!user) {

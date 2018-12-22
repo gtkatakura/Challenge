@@ -1,7 +1,13 @@
-# GraphQL - Query
+# GraphQL
 
-![alt text](resources/GraphQLVoyager-QueryRoot.png)
+![](resources/graphqlviz.svg)
 
-# GraphQL - Mutation
+# File Dependencies
 
-![alt text](resources/GraphQLVoyager-MutationRoot.png)
+## Server
+
+![](resources/madge/server.svg)
+
+## Front-end
+
+![](resources/madge/frontend.svg)

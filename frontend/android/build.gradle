@@ -32,6 +32,21 @@ allprojects {
     }
 }
 
+// TODO: check if you can remove it when the
+// react-native-image-picker release a new version (> 0.27.1)
+// reference: https://github.com/react-native-community/react-native-image-picker/issues/1002#issuecomment-445864985
+// REMOVE: BEGIN
+subprojects {
+    if (project.name.contains('react-native-image-picker')) {
+        buildscript {
+            repositories {
+                jcenter()
+                maven { url "https://dl.bintray.com/android/android-tools/"  }
+            }
+        }
+    }
+}
+// REMOVE: END
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.4'

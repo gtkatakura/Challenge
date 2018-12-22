@@ -3,7 +3,12 @@ export const unique = async (columnName, record, { Model }) => {
     return null
   }
 
-  const where = { [columnName]: record[columnName] }
+  const where = {
+    [columnName]: record[columnName],
+    ...(record.id ? {
+      _id: { $ne: record.id },
+    } : {}),
+  }
 
   if (await Model.findOne(where)) {
     return {
